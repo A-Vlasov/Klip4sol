@@ -1,0 +1,115 @@
+/* Стили для подчеркнутых смарт-контрактов */
+.smart-contract-highlighted {
+  border-bottom: 2px solid #4CAF50 !important;
+  position: relative !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.smart-contract-highlighted:hover {
+  background-color: rgba(76, 175, 80, 0.1) !important;
+  border-bottom-color: #45a049 !important;
+}
+
+/* Стили для меню смарт-контракта */
+.smart-contract-menu {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  z-index: 10000;
+  min-width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  animation: menuFadeIn 0.2s ease-out;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.smart-contract-menu .menu-btn {
+  background: #4CAF50;
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.smart-contract-menu .menu-btn:hover {
+  background: #45a049;
+}
+
+.smart-contract-menu .menu-btn.copy-btn {
+  background: #2196F3;
+}
+
+.smart-contract-menu .menu-btn.copy-btn:hover {
+  background: #1976D2;
+}
+
+/* Индикатор обнаружения */
+.smart-contract-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  z-index: 10001;
+  animation: indicatorSlideIn 0.3s ease-out;
+}
+
+@keyframes indicatorSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Стили для разных типов контрактов */
+.smart-contract-highlighted[data-contract-type="solana"] {
+  border-bottom-color: #9945FF !important;
+}
+
+.smart-contract-highlighted[data-contract-type="evm"] {
+  border-bottom-color: #F7931E !important;
+}
+
+.smart-contract-highlighted[data-contract-type="ton"] {
+  border-bottom-color: #0088CC !important;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .smart-contract-menu {
+    min-width: 150px;
+    font-size: 11px;
+    padding: 8px;
+  }
+  
+  .smart-contract-menu .menu-btn {
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+} 

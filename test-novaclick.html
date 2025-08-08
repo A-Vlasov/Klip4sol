@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test NovaClick Token Menu</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .twitter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tweet {
+            border: 1px solid #2f3336;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background-color: #000;
+        }
+        
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #333;
+            margin-right: 12px;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .username {
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .handle {
+            color: #71767b;
+            font-size: 14px;
+        }
+        
+        .tweet-content {
+            font-size: 15px;
+            line-height: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .contract-address {
+            font-family: monospace;
+            background-color: #1d1f23;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #2f3336;
+        }
+        
+        .tweet-actions {
+            display: flex;
+            justify-content: space-between;
+            color: #71767b;
+            font-size: 13px;
+        }
+        
+        .action {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .action:hover {
+            color: #1d9bf0;
+        }
+        
+        .action-icon {
+            margin-right: 8px;
+        }
+        
+        .test-info {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .test-info h2 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+        
+        .test-info ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .test-info li {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="twitter-container">
+        <div class="test-info">
+            <h2>🧪 Test NovaClick Token Menu</h2>
+            <p>Эта страница тестирует модифицированный NovaClick с меню токенов.</p>
+            <ul>
+                <li>Наведите на любой адрес токена для показа меню</li>
+                <li>Меню покажет тип сети (Solana/EVM/TON)</li>
+                <li>Кнопки "Copy" и "Analyze" в меню</li>
+                <li>Кнопка "Buy" рядом с адресом</li>
+            </ul>
+        </div>
+        
+        <!-- Tweet 1: Solana Contract -->
+        <div class="tweet">
+            <div class="tweet-header">
+                <div class="avatar"></div>
+                <div class="user-info">
+                    <div class="username">Crypto Trader</div>
+                    <div class="handle">@cryptotrader</div>
+                </div>
+            </div>
+            <div class="tweet-content">
+                Just found an amazing Solana token! 🚀
+                <br><br>
+                Contract: <span class="contract-address">7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU</span>
+                <br><br>
+                This is going to the moon! 🌙
+            </div>
+            <div class="tweet-actions">
+                <div class="action">
+                    <span class="action-icon">💬</span>
+                    <span>Reply</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">🔄</span>
+                    <span>Retweet</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">❤️</span>
+                    <span>Like</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">📊</span>
+                    <span>View</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tweet 2: EVM Contract -->
+        <div class="tweet">
+            <div class="tweet-header">
+                <div class="avatar"></div>
+                <div class="user-info">
+                    <div class="username">DeFi Analyst</div>
+                    <div class="handle">@defianalyst</div>
+                </div>
+            </div>
+            <div class="tweet-content">
+                New Ethereum token alert! ⚡
+                <br><br>
+                Address: <span class="contract-address">0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984</span>
+                <br><br>
+                High potential for gains! 📈
+            </div>
+            <div class="tweet-actions">
+                <div class="action">
+                    <span class="action-icon">💬</span>
+                    <span>Reply</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">🔄</span>
+                    <span>Retweet</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">❤️</span>
+                    <span>Like</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">📊</span>
+                    <span>View</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tweet 3: TON Contract -->
+        <div class="tweet">
+            <div class="tweet-header">
+                <div class="avatar"></div>
+                <div class="user-info">
+                    <div class="username">TON Explorer</div>
+                    <div class="handle">@tonexplorer</div>
+                </div>
+            </div>
+            <div class="tweet-content">
+                TON blockchain is amazing! 🔥
+                <br><br>
+                Token: <span class="contract-address">EQA0i8-CdGnF_DhUHHf92R1YSgoL4NJ8DiLZ_QnbYbVzClqO</span>
+                <br><br>
+                Fast and cheap transactions! ⚡
+            </div>
+            <div class="tweet-actions">
+                <div class="action">
+                    <span class="action-icon">💬</span>
+                    <span>Reply</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">🔄</span>
+                    <span>Retweet</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">❤️</span>
+                    <span>Like</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">📊</span>
+                    <span>View</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tweet 4: Mixed Addresses -->
+        <div class="tweet">
+            <div class="tweet-header">
+                <div class="avatar"></div>
+                <div class="user-info">
+                    <div class="username">Multi-Chain Trader</div>
+                    <div class="handle">@multichain</div>
+                </div>
+            </div>
+            <div class="tweet-content">
+                Multi-chain portfolio update! 📊
+                <br><br>
+                Solana: 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
+                <br>
+                Ethereum: 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984
+                <br>
+                TON: EQA0i8-CdGnF_DhUHHf92R1YSgoL4NJ8DiLZ_QnbYbVzClqO
+                <br><br>
+                All tokens performing well! 🚀
+            </div>
+            <div class="tweet-actions">
+                <div class="action">
+                    <span class="action-icon">💬</span>
+                    <span>Reply</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">🔄</span>
+                    <span>Retweet</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">❤️</span>
+                    <span>Like</span>
+                </div>
+                <div class="action">
+                    <span class="action-icon">📊</span>
+                    <span>View</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Симуляция загрузки NovaClick
+        console.log('Test page loaded - NovaClick should detect smart contracts in these tweets');
+        
+        // Симуляция отправки сообщения для активации NovaClick
+        setTimeout(() => {
+            if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+                chrome.runtime.sendMessage({ message: "twitter-content" });
+                console.log('Sent twitter-content message to NovaClick');
+            }
+        }, 1000);
+    </script>
+</body>
+</html> 

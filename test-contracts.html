@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Smart Contracts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .contract-example {
+            background: #f5f5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .address {
+            font-family: monospace;
+            background: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        .type-label {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .solana { background: #9945FF; color: white; }
+        .evm { background: #F7931E; color: white; }
+        .ton { background: #0088CC; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Тестовая страница для детекции смарт-контрактов</h1>
+    
+    <p>Эта страница содержит примеры различных типов смарт-контрактов для тестирования расширения.</p>
+
+    <h2>Solana контракты</h2>
+    <div class="contract-example">
+        <p>Токен Solana: <span class="address">7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU</span>
+        <span class="type-label solana">SOLANA</span></p>
+    </div>
+    
+    <div class="contract-example">
+        <p>Другой Solana адрес: <span class="address">TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA</span>
+        <span class="type-label solana">SOLANA</span></p>
+    </div>
+
+    <h2>EVM контракты</h2>
+    <div class="contract-example">
+        <p>Ethereum контракт: <span class="address">0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984</span>
+        <span class="type-label evm">EVM</span></p>
+    </div>
+    
+    <div class="contract-example">
+        <p>BSC контракт: <span class="address">0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82</span>
+        <span class="type-label evm">EVM</span></p>
+    </div>
+
+    <h2>TON контракты</h2>
+    <div class="contract-example">
+        <p>TON контракт: <span class="address">EQA0i8-CdGnF_DhUHHf92R1YSgoL4NJ8DiLZ_QnbYbVzClqO</span>
+        <span class="type-label ton">TON</span></p>
+    </div>
+
+    <h2>Ссылки с контрактами</h2>
+    <div class="contract-example">
+        <p>Ссылка на Solana: <a href="https://solscan.io/token/7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">Solscan</a></p>
+        <p>Ссылка на EVM: <a href="https://etherscan.io/address/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984">Etherscan</a></p>
+    </div>
+
+    <h2>JSON данные</h2>
+    <div class="contract-example">
+        <pre>{
+  "token_address": "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+  "contract_address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+  "address": "EQA0i8-CdGnF_DhUHHf92R1YSgoL4NJ8DiLZ_QnbYbVzClqO"
+}</pre>
+    </div>
+
+    <h2>Поля ввода</h2>
+    <div class="contract-example">
+        <p>Введите адрес контракта:</p>
+        <input type="text" placeholder="Enter contract address" value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" style="width: 100%; padding: 8px; margin: 5px 0;">
+        <input type="text" placeholder="Enter EVM address" value="0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984" style="width: 100%; padding: 8px; margin: 5px 0;">
+    </div>
+
+    <h2>Data атрибуты</h2>
+    <div class="contract-example">
+        <p>Элемент с data-address: <span data-address="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">Solana Token</span></p>
+        <p>Элемент с data-contract: <span data-contract="0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984">EVM Contract</span></p>
+        <p>Элемент с data-token: <span data-token="EQA0i8-CdGnF_DhUHHf92R1YSgoL4NJ8DiLZ_QnbYbVzClqO">TON Token</span></p>
+    </div>
+
+    <script>
+        // Добавляем обработчик для показа информации о расширении
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded. Extension should detect smart contracts on this page.');
+            
+            // Показываем информацию о том, что расширение должно работать
+            const info = document.createElement('div');
+            info.style.cssText = `
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                background: rgba(76, 175, 80, 0.9);
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                font-size: 12px;
+                z-index: 1000;
+            `;
+            info.innerHTML = '🔍 Extension should detect smart contracts on this page';
+            document.body.appendChild(info);
+            
+            setTimeout(() => {
+                info.remove();
+            }, 5000);
+        });
+    </script>
+</body>
+</html> 

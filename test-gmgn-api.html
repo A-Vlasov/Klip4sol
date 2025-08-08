@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test GMGN API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест GMGN API</h1>
+    
+    <div class="test-section">
+        <h3>Тестовый токен (USDC на Solana)</h3>
+        <p>Адрес: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v</p>
+        <button onclick="testTokenInfo()">Получить информацию о токене</button>
+        <div id="tokenInfoResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Пользовательский токен</h3>
+        <input type="text" id="customToken" placeholder="Введите адрес токена Solana" value="9eLRcHw2G4Ugrnp1p5165PuZsQ2YSc9GnBpGZS7Cpump">
+        <button onclick="testCustomToken()">Анализировать</button>
+        <div id="customTokenResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Топ покупатели</h3>
+        <button onclick="testTopBuyers()">Получить топ покупателей</button>
+        <div id="topBuyersResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Информация о безопасности</h3>
+        <button onclick="testSecurityInfo()">Получить информацию о безопасности</button>
+        <div id="securityResult" class="result"></div>
+    </div>
+
+    <script>
+        const GMGN_BASE_URL = 'https://gmgn.ai/defi/quotation';
+        
+        function createHeaders() {
+            return {
+                'Host': 'gmgn.ai',
+                'accept': 'application/json, text/plain, */*',
+                'accept-language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+                'dnt': '1',
+                'priority': 'u=1, i',
+                'referer': 'https://gmgn.ai/?chain=sol',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            };
+        }
+
+        async function makeRequest(url, resultElement) {
+            try {
+                resultElement.textContent = 'Загрузка...';
+                const response = await fetch(url, { headers: createHeaders() });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                resultElement.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultElement.textContent = `Ошибка: ${error.message}`;
+            }
+        }
+
+        function testTokenInfo() {
+            const address = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+            const url = `${GMGN_BASE_URL}/v1/tokens/sol/${address}`;
+            makeRequest(url, document.getElementById('tokenInfoResult'));
+        }
+
+        function testCustomToken() {
+            const address = document.getElementById('customToken').value.trim();
+            if (!address) {
+                alert('Введите адрес токена');
+                return;
+            }
+            const url = `${GMGN_BASE_URL}/v1/tokens/sol/${address}`;
+            makeRequest(url, document.getElementById('customTokenResult'));
+        }
+
+        function testTopBuyers() {
+            const address = '9eLRcHw2G4Ugrnp1p5165PuZsQ2YSc9GnBpGZS7Cpump';
+            const url = `${GMGN_BASE_URL}/v1/tokens/top_buyers/sol/${address}`;
+            makeRequest(url, document.getElementById('topBuyersResult'));
+        }
+
+        function testSecurityInfo() {
+            const address = '9eLRcHw2G4Ugrnp1p5165PuZsQ2YSc9GnBpGZS7Cpump';
+            const url = `${GMGN_BASE_URL}/v1/tokens/security/sol/${address}`;
+            makeRequest(url, document.getElementById('securityResult'));
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,550 @@
+---
+alwaysApply: true
+---
+
+# Chrome Extension Development Rules (Manifest V3)
+
+## Project Structure
+```
+extension-root/
+├── manifest.json          # Extension configuration (REQUIRED)
+├── background.js          # Service worker (REQUIRED)
+├── content.js            # Content script for target sites
+├── styles/
+│   └── target-styles.css # CSS to inject
+├── icons/                # Extension icons (REQUIRED)
+│   ├── icon16.png       # 16x16 pixels
+│   ├── icon48.png       # 48x48 pixels
+│   └── icon128.png      # 128x128 pixels
+└── README.md
+```
+
+## Manifest V3 Configuration
+
+### Basic Manifest Structure
+```json
+{
+  "manifest_version": 3,
+  "name": "Extension Name",
+  "version": "1.0.0",
+  "description": "Brief description under 132 characters",
+  
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "https://target-site.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["https://target-site.com/*"],
+      "js": ["content.js"],
+      "css": ["styles/target-styles.css"],
+      "run_at": "document_start"
+    }
+  ],
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
+```
+
+### Permission Rules
+- **Use minimal permissions** - Only request what you absolutely need
+- **activeTab** - For interacting with the current tab
+- **scripting** - For injecting CSS/JS dynamically
+- **host_permissions** - Explicitly declare target websites
+
+## Background Script (Service Worker)
+
+### Service Worker Template
+```javascript
+// background.js - Service worker for Manifest V3
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('Extension installed');
+});
+
+// Handle tab updates for CSS injection
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url?.includes('target-site.com')) {
+    chrome.scripting.insertCSS({
+      target: { tabId: tabId },
+      files: ['styles/target-styles.css']
+    }).catch(err => {
+      console.log('CSS injection handled by content script');
+    });
+  }
+});
+```
+
+### Service Worker Rules
+- **Event-driven** - Not persistent like V2 background pages
+- **No DOM access** - Cannot directly interact with web pages
+- **Limited lifetime** - May be terminated when inactive
+- **Error handling** - Always use try/catch or .catch()
+
+## Content Script
+
+### Content Script Template
+```javascript
+(function() {
+  'use strict';
+  
+  // Ensure CSS is applied
+  function ensureStylesApplied() {
+    const styleId = 'extension-styles';
+    
+    if (!document.getElementById(styleId)) {
+      const link = document.createElement('link');
+      link.id = styleId;
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = chrome.runtime.getURL('styles/target-styles.css');
+      
+      document.head.insertBefore(link, document.head.firstChild);
+    }
+  }
+  
+  // Apply styles immediately
+  ensureStylesApplied();
+  
+  // Handle SPA navigation
+  const observer = new MutationObserver(() => {
+    ensureStylesApplied();
+  });
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  } else {
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+})();
+```
+
+### Content Script Rules
+- **Wrap in IIFE** - Avoid global namespace pollution
+- **Handle dynamic content** - Use MutationObserver for SPAs
+- **Graceful degradation** - Don't break if target site changes
+- **Performance optimization** - Minimize DOM manipulation
+
+## CSS Injection
+
+### CSS Structure
+```css
+/* Use high specificity to override site styles */
+[data-testid="target-element"] {
+  property: value !important;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  [data-testid="target-element"] {
+    property: dark-value !important;
+  }
+}
+
+/* Smooth transitions */
+.target-element {
+  transition: all 0.2s ease !important;
+}
+```
+
+### CSS Rules
+- **Use !important** - To override site styles
+- **Specific selectors** - Target exact elements
+- **Responsive design** - Support different screen sizes
+- **Accessibility** - Don't break screen readers
+
+## Security Requirements
+
+### Manifest V3 Security
+- **No remote code execution** - All code bundled with extension
+- **Explicit permissions** - Declare all required permissions
+- **No eval()** - Cannot execute arbitrary code strings
+- **No inline scripts** - All JavaScript in separate files
+
+### Privacy Rules
+- **No user data collection** - Unless explicitly needed
+- **Local storage only** - Use chrome.storage.local
+- **No tracking** - Don't send user behavior externally
+- **Minimal data access** - Only access necessary elements
+
+## X.com/Twitter Specific
+
+### X.com Configuration
+```json
+"host_permissions": [
+  "https://x.com/*",
+  "https://twitter.com/*"
+],
+"matches": [
+  "https://x.com/*",
+  "https://twitter.com/*"
+]
+```
+
+### Common X.com Selectors
+```css
+[data-testid="tweet"] { }           /* Tweets */
+[data-testid="UserName"] { }        /* User profiles */
+[data-testid="trend"] { }           /* Trending topics */
+[data-testid="SideNav_NewTweet_Button"] { } /* Compose button */
+[data-testid="notification"] { }    /* Notifications */
+[data-testid="icon-verified"] { }   /* Verified badges */
+```
+
+### Handle SPA Navigation
+```javascript
+// Track URL changes for single-page application
+let currentUrl = location.href;
+
+const urlObserver = new MutationObserver(() => {
+  if (location.href !== currentUrl) {
+    currentUrl = location.href;
+    setTimeout(ensureStylesApplied, 100);
+  }
+});
+
+urlObserver.observe(document.body, { childList: true, subtree: true });
+```
+
+## Development Workflow
+
+### Testing Steps
+1. Load unpacked extension at `chrome://extensions/`
+2. Enable Developer mode
+3. Test on target sites
+4. Check console for errors
+5. Verify CSS injection works
+6. Test SPA navigation
+
+### Debugging
+- **Console logging** - Use console.log for debugging
+- **Extension errors** - Check chrome://extensions/
+- **DevTools inspection** - Verify CSS application
+- **Network monitoring** - Check for failed resource loads
+
+## Common Pitfalls to Avoid
+
+### Manifest V2 Patterns (DON'T USE)
+- ❌ `chrome.tabs.executeScript` → ✅ `chrome.scripting.executeScript`
+- ❌ `background.scripts` → ✅ `background.service_worker`
+- ❌ `browser_action` → ✅ `action`
+- ❌ Persistent backgrounds → ✅ Event-driven service workers
+
+### Security Violations
+- ❌ `eval()` or `Function()` - Will be rejected
+- ❌ Remote scripts - Bundle all code
+- ❌ Inline event handlers - Use addEventListener
+- ❌ Unsafe CSP - Follow security guidelines
+
+### Performance Issues
+- ❌ Excessive DOM queries - Cache selectors
+- ❌ Memory leaks - Clean up observers
+- ❌ Blocking operations - Use async/await
+- ❌ Large CSS files - Optimize and minify
+
+## Error Handling
+
+### Graceful Degradation
+```javascript
+chrome.scripting.insertCSS({
+  target: { tabId: tabId },
+  files: ['styles/target-styles.css']
+}).catch(err => {
+  console.log('CSS injection failed, using content script fallback');
+});
+```
+
+### Fallback Mechanisms
+- Content script fallback if service worker injection fails
+- CSS fallbacks if selectors change
+- Feature detection for API availability
+- Error logging for debugging
+
+This rule set ensures Chrome extensions follow Manifest V3 best practices with focus on CSS injection, security, and performance.
+# Chrome Extension Development Rules (Manifest V3)
+
+## Project Structure
+```
+extension-root/
+├── manifest.json          # Extension configuration (REQUIRED)
+├── background.js          # Service worker (REQUIRED)
+├── content.js            # Content script for target sites
+├── styles/
+│   └── target-styles.css # CSS to inject
+├── icons/                # Extension icons (REQUIRED)
+│   ├── icon16.png       # 16x16 pixels
+│   ├── icon48.png       # 48x48 pixels
+│   └── icon128.png      # 128x128 pixels
+└── README.md
+```
+
+## Manifest V3 Configuration
+
+### Basic Manifest Structure
+```json
+{
+  "manifest_version": 3,
+  "name": "Extension Name",
+  "version": "1.0.0",
+  "description": "Brief description under 132 characters",
+  
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "https://target-site.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["https://target-site.com/*"],
+      "js": ["content.js"],
+      "css": ["styles/target-styles.css"],
+      "run_at": "document_start"
+    }
+  ],
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
+```
+
+### Permission Rules
+- **Use minimal permissions** - Only request what you absolutely need
+- **activeTab** - For interacting with the current tab
+- **scripting** - For injecting CSS/JS dynamically
+- **host_permissions** - Explicitly declare target websites
+
+## Background Script (Service Worker)
+
+### Service Worker Template
+```javascript
+// background.js - Service worker for Manifest V3
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('Extension installed');
+});
+
+// Handle tab updates for CSS injection
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url?.includes('target-site.com')) {
+    chrome.scripting.insertCSS({
+      target: { tabId: tabId },
+      files: ['styles/target-styles.css']
+    }).catch(err => {
+      console.log('CSS injection handled by content script');
+    });
+  }
+});
+```
+
+### Service Worker Rules
+- **Event-driven** - Not persistent like V2 background pages
+- **No DOM access** - Cannot directly interact with web pages
+- **Limited lifetime** - May be terminated when inactive
+- **Error handling** - Always use try/catch or .catch()
+
+## Content Script
+
+### Content Script Template
+```javascript
+(function() {
+  'use strict';
+  
+  // Ensure CSS is applied
+  function ensureStylesApplied() {
+    const styleId = 'extension-styles';
+    
+    if (!document.getElementById(styleId)) {
+      const link = document.createElement('link');
+      link.id = styleId;
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = chrome.runtime.getURL('styles/target-styles.css');
+      
+      document.head.insertBefore(link, document.head.firstChild);
+    }
+  }
+  
+  // Apply styles immediately
+  ensureStylesApplied();
+  
+  // Handle SPA navigation
+  const observer = new MutationObserver(() => {
+    ensureStylesApplied();
+  });
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  } else {
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+})();
+```
+
+### Content Script Rules
+- **Wrap in IIFE** - Avoid global namespace pollution
+- **Handle dynamic content** - Use MutationObserver for SPAs
+- **Graceful degradation** - Don't break if target site changes
+- **Performance optimization** - Minimize DOM manipulation
+
+## CSS Injection
+
+### CSS Structure
+```css
+/* Use high specificity to override site styles */
+[data-testid="target-element"] {
+  property: value !important;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  [data-testid="target-element"] {
+    property: dark-value !important;
+  }
+}
+
+/* Smooth transitions */
+.target-element {
+  transition: all 0.2s ease !important;
+}
+```
+
+### CSS Rules
+- **Use !important** - To override site styles
+- **Specific selectors** - Target exact elements
+- **Responsive design** - Support different screen sizes
+- **Accessibility** - Don't break screen readers
+
+## Security Requirements
+
+### Manifest V3 Security
+- **No remote code execution** - All code bundled with extension
+- **Explicit permissions** - Declare all required permissions
+- **No eval()** - Cannot execute arbitrary code strings
+- **No inline scripts** - All JavaScript in separate files
+
+### Privacy Rules
+- **No user data collection** - Unless explicitly needed
+- **Local storage only** - Use chrome.storage.local
+- **No tracking** - Don't send user behavior externally
+- **Minimal data access** - Only access necessary elements
+
+## X.com/Twitter Specific
+
+### X.com Configuration
+```json
+"host_permissions": [
+  "https://x.com/*",
+  "https://twitter.com/*"
+],
+"matches": [
+  "https://x.com/*",
+  "https://twitter.com/*"
+]
+```
+
+### Common X.com Selectors
+```css
+[data-testid="tweet"] { }           /* Tweets */
+[data-testid="UserName"] { }        /* User profiles */
+[data-testid="trend"] { }           /* Trending topics */
+[data-testid="SideNav_NewTweet_Button"] { } /* Compose button */
+[data-testid="notification"] { }    /* Notifications */
+[data-testid="icon-verified"] { }   /* Verified badges */
+```
+
+### Handle SPA Navigation
+```javascript
+// Track URL changes for single-page application
+let currentUrl = location.href;
+
+const urlObserver = new MutationObserver(() => {
+  if (location.href !== currentUrl) {
+    currentUrl = location.href;
+    setTimeout(ensureStylesApplied, 100);
+  }
+});
+
+urlObserver.observe(document.body, { childList: true, subtree: true });
+```
+
+## Development Workflow
+
+### Testing Steps
+1. Load unpacked extension at `chrome://extensions/`
+2. Enable Developer mode
+3. Test on target sites
+4. Check console for errors
+5. Verify CSS injection works
+6. Test SPA navigation
+
+### Debugging
+- **Console logging** - Use console.log for debugging
+- **Extension errors** - Check chrome://extensions/
+- **DevTools inspection** - Verify CSS application
+- **Network monitoring** - Check for failed resource loads
+
+## Common Pitfalls to Avoid
+
+### Manifest V2 Patterns (DON'T USE)
+- ❌ `chrome.tabs.executeScript` → ✅ `chrome.scripting.executeScript`
+- ❌ `background.scripts` → ✅ `background.service_worker`
+- ❌ `browser_action` → ✅ `action`
+- ❌ Persistent backgrounds → ✅ Event-driven service workers
+
+### Security Violations
+- ❌ `eval()` or `Function()` - Will be rejected
+- ❌ Remote scripts - Bundle all code
+- ❌ Inline event handlers - Use addEventListener
+- ❌ Unsafe CSP - Follow security guidelines
+
+### Performance Issues
+- ❌ Excessive DOM queries - Cache selectors
+- ❌ Memory leaks - Clean up observers
+- ❌ Blocking operations - Use async/await
+- ❌ Large CSS files - Optimize and minify
+
+## Error Handling
+
+### Graceful Degradation
+```javascript
+chrome.scripting.insertCSS({
+  target: { tabId: tabId },
+  files: ['styles/target-styles.css']
+}).catch(err => {
+  console.log('CSS injection failed, using content script fallback');
+});
+```
+
+### Fallback Mechanisms
+- Content script fallback if service worker injection fails
+- CSS fallbacks if selectors change
+- Feature detection for API availability
+- Error logging for debugging
+
+This rule set ensures Chrome extensions follow Manifest V3 best practices with focus on CSS injection, security, and performance.

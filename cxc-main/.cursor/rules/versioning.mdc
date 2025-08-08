@@ -1,0 +1,85 @@
+---
+alwaysApply: true
+---
+
+# Semantic Versioning Guidelines
+
+## Version Format: major.minor.patch (e.g., 1.2.3)
+
+### Patch Version Bump (0.0.X)
+**When to use**: Small fixes, tweaks, and non-breaking changes
+- CSS styling adjustments and visual tweaks
+- HTML markup corrections
+- Bug fixes that don't change functionality
+- Documentation updates
+- Code formatting and linting fixes
+- Performance optimizations without API changes
+
+**Examples**:
+- Fixing button alignment in popup.html
+- Correcting color values in styles.css
+- Fixing typos in README.md
+- Resolving console errors without changing behavior
+
+### Minor Version Bump (0.X.0)
+**When to use**: New features and enhancements that maintain backward compatibility
+- Adding new components or UI elements
+- Implementing new functionality that doesn't break existing features
+- Adding new configuration options
+- Enhancing existing features with additional capabilities
+- Adding new content script functionality
+
+**Examples**:
+- Adding new color-coding options
+- Implementing additional X.com/Twitter element targeting
+- Adding new popup controls or settings
+- Extending manifest permissions for new features
+
+### Major Version Bump (X.0.0)
+**When to use**: Breaking changes, large rewrites, or significant architectural changes
+- Complete rewrites or major refactoring
+- Breaking API changes
+- Major architectural changes
+- Removing or significantly changing existing functionality
+- Manifest version upgrades (V2 to V3)
+- Major dependency updates that require code changes
+
+**Examples**:
+- Rewriting the entire content script architecture
+- Changing from Manifest V2 to V3
+- Complete UI/UX overhaul
+- Major changes to how the extension interacts with X.com
+
+## Version Bump Decision Process
+
+1. **Identify the primary change type** in your commit/PR
+2. **Choose the highest applicable version bump** if multiple types are present
+3. **Update manifest.json version** before releasing
+4. **Document changes** in commit messages using conventional commits format
+
+## Conventional Commit Integration
+
+- `fix:` → Patch bump
+- `feat:` → Minor bump  
+- `feat!:` or `BREAKING CHANGE:` → Major bump
+- `refactor:` → Patch bump (unless breaking)
+- `style:` → Patch bump
+- `docs:` → Patch bump
+
+## Special Considerations
+
+- **Pre-release versions**: Use suffixes like `1.0.0-beta.1` for testing
+- **Security fixes**: Always warrant at least a patch bump
+- **Multiple change types**: Use the highest applicable bump level
+- **Chrome Web Store**: Remember to update version in manifest.json for store submissions
+
+## Version History Tracking
+
+When bumping versions, ensure:
+- manifest.json version matches the intended release
+- Git tags are created for releases
+- CHANGELOG.md is updated (if maintained)
+- Release notes describe the changes appropriately
+
+- CHANGELOG.md is updated (if maintained)
+- Release notes describe the changes appropriately

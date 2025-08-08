@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Extension Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .icon-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .icon {
+            display: inline-block;
+            background: linear-gradient(45deg, #1da1f2, #0084b4);
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .icon-16 {
+            width: 16px;
+            height: 16px;
+            font-size: 8px;
+        }
+
+        .icon-48 {
+            width: 48px;
+            height: 48px;
+            font-size: 24px;
+        }
+
+        .icon-128 {
+            width: 128px;
+            height: 128px;
+            font-size: 64px;
+        }
+
+        .instructions {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1da1f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="instructions">
+        <h2>Chrome Extension Icons</h2>
+        <p>To create the required icon files:</p>
+        <ol>
+            <li>Right-click on each colored square below</li>
+            <li>Select "Save image as..." or take a screenshot</li>
+            <li>Save as PNG files with the names: icon16.png, icon48.png, icon128.png</li>
+            <li>Place them in the same folder as your extension files</li>
+        </ol>
+        <p><strong>Alternative:</strong> You can use any image editing software to create 16x16, 48x48, and 128x128
+            pixel PNG files with a simple design.</p>
+    </div>
+
+    <div class="icon-container">
+        <div class="icon icon-16">X</div>
+        <div>16x16</div>
+    </div>
+
+    <div class="icon-container">
+        <div class="icon icon-48">X</div>
+        <div>48x48</div>
+    </div>
+
+    <div class="icon-container">
+        <div class="icon icon-128">X</div>
+        <div>128x128</div>
+    </div>
+
+    <div style="margin-top: 30px; padding: 15px; background: white; border-radius: 5px;">
+        <h3>Icon Requirements:</h3>
+        <ul>
+            <li><strong>icon16.png</strong> - 16x16 pixels (toolbar icon)</li>
+            <li><strong>icon48.png</strong> - 48x48 pixels (extension management page)</li>
+            <li><strong>icon128.png</strong> - 128x128 pixels (Chrome Web Store)</li>
+        </ul>
+        <p>For now, you can create simple colored squares or use any image editing tool to create these icons. The
+            extension will work without icons, but Chrome will show a default placeholder.</p>
+    </div>
+</body>
+
+</html>
